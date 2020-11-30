@@ -44,19 +44,15 @@ The `accessibleAutocomplete` function will render an autocomplete `<input>` and 
 Then import it using a module system like Browserify / Webpack / Rollup, and call the `accessibleAutocomplete` function, providing an array of values:
 
 ```js
-import accessibleAutocomplete from 'accessible-autocomplete'
+import accessibleAutocomplete from "accessible-autocomplete";
 
-const countries = [
-  'France',
-  'Germany',
-  'United Kingdom'
-]
+const countries = ["France", "Germany", "United Kingdom"];
 
 accessibleAutocomplete({
-  element: document.querySelector('#my-autocomplete-container'),
-  id: 'my-autocomplete', // To match it to the existing <label>.
-  source: countries
-})
+  element: document.querySelector("#my-autocomplete-container"),
+  id: "my-autocomplete", // To match it to the existing <label>.
+  source: countries,
+});
 ```
 
 If you want to use it as a replacement for a `<select>` element, read the [Progressive enhancement](#progressive-enhancement) section.
@@ -66,7 +62,10 @@ If you want to use it as a replacement for a `<select>` element, read the [Progr
 You can copy the [dist/accessible-autocomplete.min.js](dist/accessible-autocomplete.min.js) file to your JavaScript folder and import it into the browser:
 
 ```html
-<script type="text/javascript" src="assets/js/accessible-autocomplete.min.js"></script>
+<script
+  type="text/javascript"
+  src="assets/js/accessible-autocomplete.min.js"
+></script>
 ```
 
 ### Styling the autocomplete
@@ -90,13 +89,13 @@ You can also import it using Sass:
 If you already use Preact in your application, you can import a bundle that will use that:
 
 ```js
-import preact from 'preact'
-import Autocomplete from 'accessible-autocomplete/preact'
+import preact from "preact";
+import Autocomplete from "accessible-autocomplete/preact";
 
 preact.render(
-  <Autocomplete id='autocomplete' source={suggest} />,
-  document.querySelector('#container')
-)
+  <Autocomplete id="autocomplete" source={suggest} />,
+  document.querySelector("#container")
+);
 ```
 
 [Try out the Preact example!](https://alphagov.github.io/accessible-autocomplete/examples/preact/)
@@ -106,14 +105,14 @@ preact.render(
 If you already use React in your application, you can import a bundle that will use that:
 
 ```js
-import React from 'react'
-import ReactDOM from 'react-dom'
-import Autocomplete from 'accessible-autocomplete/react'
+import React from "react";
+import ReactDOM from "react-dom";
+import Autocomplete from "accessible-autocomplete/react";
 
 ReactDOM.render(
-  <Autocomplete id='autocomplete' source={suggest} />,
-  document.querySelector('#container')
-)
+  <Autocomplete id="autocomplete" source={suggest} />,
+  document.querySelector("#container")
+);
 ```
 
 [Try out the React example!](https://alphagov.github.io/accessible-autocomplete/examples/react/)
@@ -150,11 +149,7 @@ An array of values to search when the user types in the input field, or a functi
 An example of an array of values:
 
 ```js
-const countries = [
-  'France',
-  'Germany',
-  'United Kingdom'
-]
+const countries = ["France", "Germany", "United Kingdom"];
 ```
 
 If `source` is a function, the arguments are: `query: string, populateResults: Function`
@@ -164,14 +159,12 @@ Similar to the [`source` argument for typeahead.js](https://github.com/corejavas
 An example of a simple suggestion engine:
 
 ```js
-function suggest (query, populateResults) {
-  const results = [
-    'France',
-    'Germany',
-    'United Kingdom'
-  ]
-  const filteredResults = results.filter(result => result.indexOf(query) !== -1)
-  populateResults(filteredResults)
+function suggest(query, populateResults) {
+  const results = ["France", "Germany", "United Kingdom"];
+  const filteredResults = results.filter(
+    (result) => result.indexOf(query) !== -1
+  );
+  populateResults(filteredResults);
 }
 ```
 
@@ -272,6 +265,10 @@ This object defines templates (functions) that are used for displaying parts of 
 
 `suggestion` is a function that receives one argument, a suggestion to be displayed. It is used when rendering suggestions, and should return a string, which can contain HTML. :warning: **Caution:** because this function allows you to output arbitrary HTML, you should [make sure it's trusted](https://en.wikipedia.org/wiki/Cross-site_scripting), and accessible.
 
+### Recent Search History
+
+Templates can be modified to show recent search history by setting recentSearch to true. You will still need to pass in a suggestion source.
+
 #### `dropdownArrow` (default: A rectangle pointing down)
 
 Type: `Function`
@@ -311,25 +308,28 @@ Default:
 ```js
 (length, contentSelectedOption) => {
   const words = {
-    result: (length === 1) ? 'result' : 'results',
-    is: (length === 1) ? 'is' : 'are'
-  }
+    result: length === 1 ? "result" : "results",
+    is: length === 1 ? "is" : "are",
+  };
 
-  return <span>{length} {words.result} {words.is} available. {contentSelectedOption}</span>
-}
+  return (
+    <span>
+      {length} {words.result} {words.is} available. {contentSelectedOption}
+    </span>
+  );
+};
 ```
 
 Type: `Function`
 
 A function that receives two arguments, the count of available options and the return value of `tStatusSelectedOption`, and should return the text used in the accessibility hint to indicate which options are available and which is selected.
 
-#### `tAssistiveHint` (default: `() => 'When autocomplete results are available use up and down arrows to review and enter to select.  Touch device users, explore by touch or with swipe gestures.'`)
+#### `tAssistiveHint` (default: `() => 'When autocomplete results are available use up and down arrows to review and enter to select. Touch device users, explore by touch or with swipe gestures.'`)
 
 Type: `Function`
 
 A function that receives no arguments and should return the text to be assigned as the aria description of the html `input` element, via the `aria-describedby` attribute.
 This text is intended as an initial instruction to the assistive tech user. The `aria-describedby` attribute is automatically removed once user input is detected, in order to reduce screen reader verbosity.
-
 
 ## Progressive enhancement
 
@@ -349,8 +349,8 @@ You can use the `accessibleAutocomplete.enhanceSelectElement` function to enhanc
 
 ```js
 accessibleAutocomplete.enhanceSelectElement({
-  selectElement: document.querySelector('#location-picker')
-})
+  selectElement: document.querySelector("#location-picker"),
+});
 ```
 
 This will:
@@ -388,9 +388,9 @@ Then passing a `defaultValue` option of `''` will then leave the autocomplete bl
 
 ```js
 accessibleAutocomplete.enhanceSelectElement({
-  defaultValue: '',
-  selectElement: document.querySelector('#location-picker')
-})
+  defaultValue: "",
+  selectElement: document.querySelector("#location-picker"),
+});
 ```
 
 Any null options will also be filtered out of the options used to populate the `source` of the autocomplete element. To preserve options with no value in the autcomplete then pass a `preserveNullOptions` flag of `true` to `enhanceSelectElement`.
@@ -407,9 +407,9 @@ Example usage:
 accessibleAutocomplete({
   // additional options
   onConfirm: (val) => {
-    track(val)
-  }
-})
+    track(val);
+  },
+});
 ```
 
 ## Why another autocomplete?

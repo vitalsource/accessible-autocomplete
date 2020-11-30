@@ -58,7 +58,9 @@ export default class Autocomplete extends Component {
     confirmOnBlur: true,
     showNoOptionsFound: true,
     showAllValues: false,
+    recentSearch: false,
     required: false,
+    tRecentSearch: () => "Recent searches",
     tNoResults: () => "No results found",
     tAssistiveHint: () =>
       "When autocomplete results are available use up and down arrows to review and enter to select.  Touch device users, explore by touch or with swipe gestures.",
@@ -233,7 +235,7 @@ export default class Autocomplete extends Component {
   }
 
   handleInputChange(event) {
-    const { minLength, source, showAllValues } = this.props;
+    const { minLength, recentSearch, source, showAllValues } = this.props;
     const autoselect = this.hasAutoselect();
     const query = event.target.value;
     const queryEmpty = query.length === 0;
@@ -247,7 +249,7 @@ export default class Autocomplete extends Component {
 
     const searchForOptions =
       showAllValues || (!queryEmpty && queryChanged && queryLongEnough);
-    if (searchForOptions || queryEmpty) {
+    if (searchForOptions || (queryEmpty && recentSearch)) {
       source(query, (options) => {
         const optionsAvailable = options.length;
         if (optionsAvailable > 0) {
@@ -448,9 +450,11 @@ export default class Autocomplete extends Component {
       minLength,
       name,
       placeholder,
+      recentSearch,
       required,
       showAllValues,
       tNoResults,
+      tRecentSearch,
       tStatusQueryTooShort,
       tStatusNoResults,
       tStatusSelectedOption,
@@ -588,6 +592,7 @@ export default class Autocomplete extends Component {
             this.elementReferences[-1] = inputElement;
           }}
           type="text"
+          recentSearch={recentSearch}
           role="combobox"
           required={required}
           value={query}
@@ -600,6 +605,13 @@ export default class Autocomplete extends Component {
           onMouseLeave={(event) => this.handleListMouseLeave(event)}
           id={`${id}__listbox`}
           role="listbox">
+          {recentSearch && !queryNotEmpty && (
+            <li
+              className={`${optionClassName} ${optionClassName}--recent-search`}>
+              {tRecentSearch()}
+            </li>
+          )}
+
           {options.map((option, index) => {
             const showFocused =
               focused === -1 ? selected === index : focused === index;
