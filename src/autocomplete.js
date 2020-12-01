@@ -58,7 +58,7 @@ export default class Autocomplete extends Component {
     confirmOnBlur: true,
     showNoOptionsFound: true,
     showAllValues: false,
-    recentSearch: false,
+    showRecentSearch: false,
     required: false,
     tRecentSearch: () => "Recent searches",
     tNoResults: () => "No results found",
@@ -235,7 +235,7 @@ export default class Autocomplete extends Component {
   }
 
   handleInputChange(event) {
-    const { minLength, recentSearch, source, showAllValues } = this.props;
+    const { showRecentSearch, minLength, source, showAllValues } = this.props;
     const autoselect = this.hasAutoselect();
     const query = event.target.value;
     const queryEmpty = query.length === 0;
@@ -249,24 +249,17 @@ export default class Autocomplete extends Component {
 
     const searchForOptions =
       showAllValues || (!queryEmpty && queryChanged && queryLongEnough);
-    if (searchForOptions || (queryEmpty && recentSearch)) {
+    if (searchForOptions || showRecentSearch) {
       source(query, (options) => {
-        const optionsAvailable = options.length;
-        if (optionsAvailable > 0) {
-          this.setState({
-            menuOpen: optionsAvailable,
-            options,
-            selected: autoselect && optionsAvailable ? 0 : -1,
-            validChoiceMade: false,
-          });
-        } else {
-          this.setState({
-            menuOpen: false,
-            options: [],
-          });
-        }
+        const optionsAvailable = options.length > 0;
+        this.setState({
+          menuOpen: optionsAvailable,
+          options,
+          selected: autoselect && optionsAvailable ? 0 : -1,
+          validChoiceMade: false,
+        });
       });
-    } else if (!queryLongEnough) {
+    } else if (queryEmpty || !queryLongEnough) {
       this.setState({
         menuOpen: false,
         options: [],
@@ -450,9 +443,9 @@ export default class Autocomplete extends Component {
       minLength,
       name,
       placeholder,
-      recentSearch,
       required,
       showAllValues,
+      showRecentSearch,
       tNoResults,
       tRecentSearch,
       tStatusQueryTooShort,
@@ -552,6 +545,7 @@ export default class Autocomplete extends Component {
           minQueryLength={minLength}
           selectedOption={this.templateInputValue(options[selected])}
           selectedOptionIndex={selected}
+          showRecentSearch={showRecentSearch}
           validChoiceMade={validChoiceMade}
           isInFocus={this.state.focused !== null}
           tQueryTooShort={tStatusQueryTooShort}
@@ -592,9 +586,9 @@ export default class Autocomplete extends Component {
             this.elementReferences[-1] = inputElement;
           }}
           type="text"
-          recentSearch={recentSearch}
           role="combobox"
           required={required}
+          showRecentSearch={showRecentSearch}
           value={query}
         />
 
@@ -605,7 +599,7 @@ export default class Autocomplete extends Component {
           onMouseLeave={(event) => this.handleListMouseLeave(event)}
           id={`${id}__listbox`}
           role="listbox">
-          {recentSearch && !queryNotEmpty && (
+          {showRecentSearch && !queryNotEmpty && (
             <li
               className={`${optionClassName} ${optionClassName}--recent-search`}>
               {tRecentSearch()}
