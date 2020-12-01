@@ -280,6 +280,7 @@ source: (query, populateResults) => {
           }
         },
       });
+```
 
 #### `templates` (default: `undefined`)
 
