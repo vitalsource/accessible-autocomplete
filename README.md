@@ -252,7 +252,7 @@ The autocomplete will display a "No results found" template when there are no re
 
 Templates can be modified to show recent search history by setting recentSearch to true. You will still need to pass in a suggestion source.
 
-````js
+```js
 source: (query, populateResults) => {
           const recentSearches = ["Biology", "Bio"];
           const results = [
@@ -298,6 +298,7 @@ This object defines templates (functions) that are used for displaying parts of 
 `inputValue` is a function that receives one argument, the currently selected suggestion. It returns the string value to be inserted into the input.
 
 `suggestion` is a function that receives one argument, a suggestion to be displayed. It is used when rendering suggestions, and should return a string, which can contain HTML. :warning: **Caution:** because this function allows you to output arbitrary HTML, you should [make sure it's trusted](https://en.wikipedia.org/wiki/Cross-site_scripting), and accessible.
+
 #### `dropdownArrow` (default: A rectangle pointing down)
 
 Type: `Function`
@@ -353,7 +354,7 @@ Default:
     </span>
   );
 };
-````
+```
 
 Type: `Function`
 
