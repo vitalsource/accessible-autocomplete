@@ -248,6 +248,39 @@ Type: `Boolean`
 
 The autocomplete will display a "No results found" template when there are no results. Set to `false` to disable.
 
+#### `showRecentSearch` (default: `false`)
+
+Templates can be modified to show recent search history by setting recentSearch to true. You will still need to pass in a suggestion source.
+
+````js
+source: (query, populateResults) => {
+          const recentSearches = ["Biology", "Bio"];
+          const results = [
+            "Biomes",
+            "Biodiversity",
+            "Biology",
+            "Biomedical",
+            "Biometrics",
+          ];
+
+          const filteredResults = results.filter((result) => {
+            let name;
+            if (typeof result === "string") {
+              name = result;
+            } else {
+              name = result.name;
+            }
+            return name.indexOf(query) === 0;
+          });
+
+          if (query.length === 0) {
+            populateResults(recentSearches);
+          } else {
+            populateResults(filteredResults);
+          }
+        },
+      });
+
 #### `templates` (default: `undefined`)
 
 Type:
@@ -264,11 +297,6 @@ This object defines templates (functions) that are used for displaying parts of 
 `inputValue` is a function that receives one argument, the currently selected suggestion. It returns the string value to be inserted into the input.
 
 `suggestion` is a function that receives one argument, a suggestion to be displayed. It is used when rendering suggestions, and should return a string, which can contain HTML. :warning: **Caution:** because this function allows you to output arbitrary HTML, you should [make sure it's trusted](https://en.wikipedia.org/wiki/Cross-site_scripting), and accessible.
-
-#### `recentSearch` (default: `false`)
-
-Templates can be modified to show recent search history by setting recentSearch to true. You will still need to pass in a suggestion source.
-
 #### `dropdownArrow` (default: A rectangle pointing down)
 
 Type: `Function`
@@ -282,6 +310,12 @@ A function that gets passed an object with the property `className` (`{ classNam
 Type: `Function`
 
 A function that receives no arguments and should return the text used in the dropdown to indicate that there are no results.
+
+#### `tRecentSearch` (default: `() => 'Recent searches'`)
+
+Type: `Function`
+
+A function that receives no arguments and should return the text used in the dropdown to indicate the most recent searches are available.
 
 #### `tStatusQueryTooShort` (default: `` (minQueryLength) => `Type in ${minQueryLength} or more characters for results` ``)
 
@@ -318,7 +352,7 @@ Default:
     </span>
   );
 };
-```
+````
 
 Type: `Function`
 
