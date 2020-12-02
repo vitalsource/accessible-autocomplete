@@ -24,13 +24,18 @@ export default class Status extends Component {
     tNoResults: () => "No search results",
     tSelectedOption: (selectedOption, length, index) =>
       `${selectedOption} ${index + 1} of ${length} is highlighted`,
-    tResults: (showRecentSearch, length, contentSelectedOption) => {
+    tResults: (
+      showRecentSearch,
+      queryLength,
+      length,
+      contentSelectedOption
+    ) => {
       const words = {
-        recent: showRecentSearch ? "You have recent searches." : "",
+        recent: showRecentSearch && queryLength === 0 ? "recent search" : "",
         result: length === 1 ? "result" : "results",
         is: length === 1 ? "is" : "are",
       };
-      return `${words.recent} ${length} ${words.result} ${words.is} available. ${contentSelectedOption}`;
+      return `${length} ${words.recent} ${words.result} ${words.is} available. ${contentSelectedOption}`;
     },
   };
 
@@ -87,7 +92,12 @@ export default class Status extends Component {
     } else if (noResults) {
       content = tNoResults();
     } else {
-      content = tResults(showRecentSearch, length, contentSelectedOption);
+      content = tResults(
+        showRecentSearch,
+        queryLength,
+        length,
+        contentSelectedOption
+      );
     }
 
     this.debounceStatusUpdate();
