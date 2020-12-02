@@ -588,7 +588,6 @@ export default class Autocomplete extends Component {
           type="text"
           role="combobox"
           required={required}
-          showRecentSearch={showRecentSearch}
           value={query}
         />
 

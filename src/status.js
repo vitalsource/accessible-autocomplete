@@ -30,9 +30,6 @@ export default class Status extends Component {
         result: length === 1 ? "result" : "results",
         is: length === 1 ? "is" : "are",
       };
-      console.log(
-        `${words.recent} ${length} ${words.result} ${words.is} available. ${contentSelectedOption}`
-      );
       return `${words.recent} ${length} ${words.result} ${words.is} available. ${contentSelectedOption}`;
     },
   };
